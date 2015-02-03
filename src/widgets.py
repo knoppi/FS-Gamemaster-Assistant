@@ -45,7 +45,7 @@ class participant_model(QtGui.QWidget):
 
         self.setLayout(layout)
 
-    def reorder(self):
+    def next_round(self):
         self.order = random.randint(0, 10)
         self.orderWidget.setText("%i" % self.order)
         #self.initUI()
@@ -63,7 +63,7 @@ class participants_list():
 
     def sort_participants(self, participants):
         # we restrict the order range to 0-10
-        nested_base = [[] for i in range(11)]
+        nested_base = [[] for i in range(13)]
         for participant in participants:
             nested_base[participant.order].append(participant)
 
@@ -85,7 +85,7 @@ class participants_list():
         participants_new = []
 
         for participant in self.flattened_list:
-            participant.reorder()
+            participant.next_round()
 
             participants_new.append(participant)
 
@@ -150,10 +150,16 @@ if __name__ == "__main__":
 
     app = QtGui.QApplication(sys.argv)
 
-    char1 = participant_model("Alice")
-    char2 = participant_model("Bob")
-    char3 = participant_model("Eve")
-    char4 = participant_model("Villain 1")
+    from rules import NPC
+    #char1 = participant_model("Alice")
+    #char2 = participant_model("Bob")
+    #char3 = participant_model("Eve")
+    #char4 = participant_model("Villain 1")
+    char1 = NPC("Alice", 3, 3, 8, 1)
+    char2 = NPC("Bob", 3, 3, 8, 1)
+    char3 = NPC("Eve", 3, 3, 8, 1)
+    char4 = NPC("Villain 1", 3, 3, 8, 1)
+    #char4.reduce_hitpoints(3)
 
     participants = participants_list([char1, char2, char3, char4])
 
