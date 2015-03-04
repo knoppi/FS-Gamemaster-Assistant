@@ -151,14 +151,15 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
     from rules import NPC
+    from rules import PC
     #char1 = participant_model("Alice")
     #char2 = participant_model("Bob")
     #char3 = participant_model("Eve")
     #char4 = participant_model("Villain 1")
     char1 = NPC("Alice", 3, 3, 8, 1)
-    char2 = NPC("Bob", 3, 3, 8, 1)
+    char2 = PC("Bob", 3, 3, 8, 1)
     char3 = NPC("Eve", 3, 3, 8, 1)
-    char4 = NPC("Villain 1", 3, 3, 8, 1)
+    char4 = PC("Villain 1", 3, 3, 8, 1)
     #char4.reduce_hitpoints(3)
 
     participants = participants_list([char1, char2, char3, char4])

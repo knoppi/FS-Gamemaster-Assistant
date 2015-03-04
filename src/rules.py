@@ -8,7 +8,7 @@ import random
 from PySide import QtGui, QtCore
 
 
-class NPC(QtGui.QWidget):
+class Char(QtGui.QWidget):
     """
     Simple character model used for NPCs where, potentially, less traits are
     required.
@@ -27,7 +27,7 @@ class NPC(QtGui.QWidget):
                  name, dexterity, wits, hps, defense,
                  defense_modifier=0,
                  parent=None):
-        super(NPC, self).__init__(parent)
+        super(Char, self).__init__(parent)
 
         self.name = name
         self.dexterity = dexterity
@@ -112,7 +112,6 @@ class NPC(QtGui.QWidget):
 
         self.write_current_hitpoints()
         self.write_current_defense()
-        self.set_stance_label()
 
     def set_connections(self):
         self.hp_minus_button.clicked.connect(self.reduce_hitpoints)
@@ -223,6 +222,73 @@ class NPC(QtGui.QWidget):
     def increase_defense(self, amount=1):
         self.temporary_defense_modifier += amount
         self.write_current_defense()
+
+    def next_round(self):
+        self.order = self.base_initiative + random.randint(1, 6)
+        self.temporary_defense_modifier = self.next_round_defense_modifier
+        self.write_current_defense()
+        self.initiativeLabel.setText("%i" % self.order)
+
+
+class PC(Char):
+    """
+    Simple character model used for NPCs where, potentially, less traits are
+    required.
+
+    :param str name: Identifier for the character
+    :param int dexterity: dexterity trait
+    :param int wits: wits trait
+    :param int hps: hit points at the beginning of the battle
+    :param int defense: characters base defense
+    :param inst defense_modifier: modifiers that might vanish during battle
+
+    Character class that allows for a smart display of the most important traits
+    and easy modifications.
+    """
+    def __init__(self,
+                 name, dexterity, wits, hps, defense,
+                 defense_modifier=0,
+                 parent=None):
+        super(PC, self).__init__(
+            name, dexterity, wits, hps, defense,
+            defense_modifier)
+
+        self.initiative_roll = 1
+
+    def next_round(self):
+        self.initiative_roll, valid = QtGui.QInputDialog.getInteger(
+            self, "Dice roll",
+            "What is the result of %s's initiative roll?" % self.name,
+            value=self.initiative_roll,
+            minValue=1, maxValue=6, step=1)
+        self.order = self.base_initiative + self.initiative_roll
+        self.temporary_defense_modifier = self.next_round_defense_modifier
+        self.write_current_defense()
+        self.initiativeLabel.setText("%i" % self.order)
+
+
+class NPC(Char):
+    """
+    Simple character model used for NPCs where, potentially, less traits are
+    required.
+
+    :param str name: Identifier for the character
+    :param int dexterity: dexterity trait
+    :param int wits: wits trait
+    :param int hps: hit points at the beginning of the battle
+    :param int defense: characters base defense
+    :param inst defense_modifier: modifiers that might vanish during battle
+
+    Character class that allows for a smart display of the most important traits
+    and easy modifications.
+    """
+    def __init__(self,
+                 name, dexterity, wits, hps, defense,
+                 defense_modifier=0,
+                 parent=None):
+        super(NPC, self).__init__(
+            name, dexterity, wits, hps, defense,
+            defense_modifier)
 
     def next_round(self):
         self.order = self.base_initiative + random.randint(1, 6)
