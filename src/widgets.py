@@ -63,7 +63,7 @@ class participants_list():
 
     def sort_participants(self, participants):
         # we restrict the order range to 0-10
-        nested_base = [[] for i in range(13)]
+        nested_base = [[] for i in range(23)]
         for participant in participants:
             nested_base[participant.order].append(participant)
 
@@ -116,12 +116,14 @@ class ordered_list(QtGui.QWidget):
         self.setLayout(self.verticalLayout)
 
 
-class TestWindow(QtGui.QWidget):
+#class TestWindow(QtGui.QWidget):
+class TestWindow(QtGui.QScrollArea):
     def __init__(self, participants, parent=None):
         super(TestWindow, self).__init__(parent)
         self.participants = participants
 
         self.setupUI()
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -156,13 +158,23 @@ if __name__ == "__main__":
     #char2 = participant_model("Bob")
     #char3 = participant_model("Eve")
     #char4 = participant_model("Villain 1")
-    char1 = NPC("Alice", 3, 3, 8, 1)
-    char2 = PC("Bob", 3, 3, 8, 1)
-    char3 = NPC("Eve", 3, 3, 8, 1)
-    char4 = PC("Villain 1", 3, 3, 8, 1)
-    #char4.reduce_hitpoints(3)
+    chars = [
+        PC("Nader", 3, 8, 9, 1),
+        PC("Tristan", 6, 5, 11, 1),
+        PC("Hieronymus", 7, 6, 8, 1),
+        PC("Frederik", 6, 9, 10, 1),
+        NPC("Ronnie", 8, 3, 11, 1),
 
-    participants = participants_list([char1, char2, char3, char4])
+        NPC("Bob", 6, 4, 10, 1),
+        NPC("Alice", 6, 4, 10, 1),
+        #NPC("Eve", 6, 4, 10, 1),
+        #NPC("Chainy", 6, 4, 10, 1),
+        #NPC("Yassyar", 6, 4, 10, 1),
+        #NPC("Palok", 6, 4, 10, 1),
+        #NPC("Pumpur", 6, 4, 10, 1),
+    ]
+
+    participants = participants_list(chars)
 
     ol = TestWindow(participants)
     ol.show()
