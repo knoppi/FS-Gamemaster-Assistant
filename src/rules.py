@@ -64,14 +64,17 @@ class Char(QtGui.QWidget):
         self.nameWidget = QtGui.QLabel(("<b>%s</b>" % self.name))
         self.initiativeLabel = QtGui.QLabel("%i" % self.order)
         self.initiativeLabel.setAlignment(QtCore.Qt.AlignRight)
+        #layout.addWidget(self.nameWidget, 0, 0)
+        #layout.addWidget(self.initiativeLabel, 0, 2)
         layout.addWidget(self.nameWidget, 0, 0)
-        layout.addWidget(self.initiativeLabel, 0, 2)
+        layout.addWidget(self.initiativeLabel, 0, 1)
 
         # second row, more complicated
         self.stanceLabel = QtGui.QComboBox()
         self.stanceLabel.addItems(["neutral", "aggressive",
                                    "defensive", "total defense"])
-        layout.addWidget(self.stanceLabel, 1, 0)
+        #layout.addWidget(self.stanceLabel, 1, 0)
+        layout.addWidget(self.stanceLabel, 0, 2)
 
         self.def_layout = QtGui.QHBoxLayout()
         self.def_minus_button = QtGui.QPushButton("-")
@@ -82,15 +85,16 @@ class Char(QtGui.QWidget):
         self.def_layout.addWidget(self.def_label)
         self.def_layout.addWidget(self.def_plus_button)
 
-        layout.addLayout(self.def_layout, 1, 1)
+        #layout.addLayout(self.def_layout, 1, 1)
+        layout.addLayout(self.def_layout, 0, 3)
 
         self.box_def_modifier = QtGui.QSpinBox()
         self.box_def_modifier.setMinimum(-30)
-        layout.addWidget(self.box_def_modifier)
+        layout.addWidget(self.box_def_modifier, 0, 4)
 
         # third row, again easier
         self.fightingStanceLabel = QtGui.QLabel("fighting stance")
-        layout.addWidget(self.fightingStanceLabel, 2, 0)
+        #layout.addWidget(self.fightingStanceLabel, 2, 0)
 
         self.hp_layout = QtGui.QHBoxLayout()
         self.hp_minus_button = QtGui.QPushButton("-")
@@ -101,12 +105,14 @@ class Char(QtGui.QWidget):
         self.hp_layout.addWidget(self.hp_label)
         self.hp_layout.addWidget(self.hp_plus_button)
 
-        layout.addLayout(self.hp_layout, 2, 1, 1, 2)
+        #layout.addLayout(self.hp_layout, 2, 1, 1, 2)
+        layout.addLayout(self.hp_layout, 0, 5)
 
         # add a line at the bottom of the widget
         frame = QtGui.QFrame()
         frame.setFrameShape(QtGui.QFrame.HLine)
-        layout.addWidget(frame, 3, 0, 1, 3)
+        #layout.addWidget(frame, 3, 0, 1, 3)
+        layout.addWidget(frame, 0, 6)
 
         self.setLayout(layout)
 

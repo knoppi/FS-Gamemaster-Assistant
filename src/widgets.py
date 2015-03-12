@@ -63,7 +63,7 @@ class participants_list():
 
     def sort_participants(self, participants):
         # we restrict the order range to 0-10
-        nested_base = [[] for i in range(13)]
+        nested_base = [[] for i in range(23)]
         for participant in participants:
             nested_base[participant.order].append(participant)
 
@@ -116,17 +116,21 @@ class ordered_list(QtGui.QWidget):
         self.setLayout(self.verticalLayout)
 
 
-class BattleWidget(QtGui.QWidget):
+class BattleWidget(QtGui.QScrollArea):
     def __init__(self, participants, parent=None):
         super(BattleWidget, self).__init__(parent)
         self.participants = participants
 
         self.setupUI()
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        print self.sizePolicy().expandingDirections()
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
     def setupUI(self):
-        layout = QtGui.QGridLayout()
+        inner_widget = QtGui.QWidget()
+        layout = QtGui.QGridLayout(inner_widget)
 
         action_list = ordered_list(self.participants)
         layout.addWidget(action_list, 0, 0, 6, 1)
@@ -148,7 +152,9 @@ class BattleWidget(QtGui.QWidget):
         button3.setObjectName("activate")
         layout.addWidget(button3, 5, 1)
 
-        self.setLayout(layout)
+        inner_widget.setMinimumWidth(1000)
+        self.setWidget(inner_widget)
+        self.setMinimumWidth(1000)
 
     @QtCore.Slot()
     def on_button_released(self):
@@ -211,28 +217,26 @@ if __name__ == "__main__":
 
     from rules import NPC
     from rules import PC
-    #char1 = participant_model("Alice")
-    #char2 = participant_model("Bob")
-    #char3 = participant_model("Eve")
-    #char4 = participant_model("Villain 1")
-    char1 = NPC("Alice", 3, 3, 8, 1)
-    char2 = PC("Bob", 3, 3, 8, 1)
-    char3 = NPC("Eve", 3, 3, 8, 1)
-    char4 = PC("Villain 1", 3, 3, 8, 1)
-    chars = [
-        PC("Tristan Presbyterian", 3, 3, 8, 1),
-        PC("Frederik Manson", 3, 3, 8, 1),
-        PC("Bruder Hieronymus", 3, 3, 8, 1),
-        PC("Nader al Malik", 3, 3, 8, 1),
-        NPC("Ronny", 3, 3, 8, 1),
-        NPC("Eve", 3, 3, 8, 1),
-    ]
-    #char4.reduce_hitpoints(3)
 
-    #participants = participants_list([char1, char2, char3, char4])
+    chars = [
+        PC("Nader", 3, 8, 9, 1),
+        PC("Tristan", 6, 5, 11, 1),
+        PC("Hieronymus", 7, 6, 8, 1),
+        PC("Frederik", 6, 9, 10, 1),
+        NPC("Ronnie", 8, 3, 11, 1),
+
+        NPC("Bob", 6, 4, 10, 1),
+        NPC("Alice", 6, 4, 10, 1),
+        NPC("Eve", 6, 4, 10, 1),
+        NPC("Chainy", 6, 4, 10, 1),
+        NPC("Yassyar", 6, 4, 10, 1),
+        NPC("Palok", 6, 4, 10, 1),
+        NPC("Pumpur", 6, 4, 10, 1),
+    ]
+
     participants = participants_list(chars)
 
-    ol = TestWindow(participants)
+    ol = BattleWidget(participants)
     ol.show()
 
     sys.exit(app.exec_())
