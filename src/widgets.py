@@ -116,19 +116,21 @@ class ordered_list(QtGui.QWidget):
         self.setLayout(self.verticalLayout)
 
 
-#class TestWindow(QtGui.QWidget):
-class TestWindow(QtGui.QScrollArea):
+class BattleWidget(QtGui.QScrollArea):
     def __init__(self, participants, parent=None):
-        super(TestWindow, self).__init__(parent)
+        super(BattleWidget, self).__init__(parent)
         self.participants = participants
 
         self.setupUI()
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        print self.sizePolicy().expandingDirections()
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
     def setupUI(self):
-        layout = QtGui.QGridLayout()
+        inner_widget = QtGui.QWidget()
+        layout = QtGui.QGridLayout(inner_widget)
 
         action_list = ordered_list(self.participants)
         layout.addWidget(action_list, 0, 0)
@@ -137,7 +139,9 @@ class TestWindow(QtGui.QScrollArea):
         button.setObjectName("button")
         layout.addWidget(button, 1, 1)
 
-        self.setLayout(layout)
+        inner_widget.setMinimumWidth(1000)
+        self.setWidget(inner_widget)
+        self.setMinimumWidth(1000)
 
     @QtCore.Slot()
     def on_button_released(self):
@@ -154,10 +158,7 @@ if __name__ == "__main__":
 
     from rules import NPC
     from rules import PC
-    #char1 = participant_model("Alice")
-    #char2 = participant_model("Bob")
-    #char3 = participant_model("Eve")
-    #char4 = participant_model("Villain 1")
+
     chars = [
         PC("Nader", 3, 8, 9, 1),
         PC("Tristan", 6, 5, 11, 1),
@@ -167,16 +168,16 @@ if __name__ == "__main__":
 
         NPC("Bob", 6, 4, 10, 1),
         NPC("Alice", 6, 4, 10, 1),
-        #NPC("Eve", 6, 4, 10, 1),
-        #NPC("Chainy", 6, 4, 10, 1),
-        #NPC("Yassyar", 6, 4, 10, 1),
-        #NPC("Palok", 6, 4, 10, 1),
-        #NPC("Pumpur", 6, 4, 10, 1),
+        NPC("Eve", 6, 4, 10, 1),
+        NPC("Chainy", 6, 4, 10, 1),
+        NPC("Yassyar", 6, 4, 10, 1),
+        NPC("Palok", 6, 4, 10, 1),
+        NPC("Pumpur", 6, 4, 10, 1),
     ]
 
     participants = participants_list(chars)
 
-    ol = TestWindow(participants)
+    ol = BattleWidget(participants)
     ol.show()
 
     sys.exit(app.exec_())
