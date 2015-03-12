@@ -240,7 +240,7 @@ class PC(Char):
     :param int wits: wits trait
     :param int hps: hit points at the beginning of the battle
     :param int defense: characters base defense
-    :param inst defense_modifier: modifiers that might vanish during battle
+    :param int defense_modifier: modifiers that might vanish during battle
 
     Character class that allows for a smart display of the most important traits
     and easy modifications.

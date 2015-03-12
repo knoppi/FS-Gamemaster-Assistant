@@ -116,6 +116,71 @@ class ordered_list(QtGui.QWidget):
         self.setLayout(self.verticalLayout)
 
 
+class BattleWidget(QtGui.QWidget):
+    def __init__(self, participants, parent=None):
+        super(BattleWidget, self).__init__(parent)
+        self.participants = participants
+
+        self.setupUI()
+
+        QtCore.QMetaObject.connectSlotsByName(self)
+
+    def setupUI(self):
+        layout = QtGui.QGridLayout()
+
+        action_list = ordered_list(self.participants)
+        layout.addWidget(action_list, 0, 0, 6, 1)
+
+        button = QtGui.QPushButton("press me")
+        button.setObjectName("button")
+        layout.addWidget(button, 6, 1)
+
+        # graveyard
+        layout.addWidget(QtGui.QLabel("Graveyard"), 0, 1)
+        layout.addWidget(QtGui.QLabel("Liste"), 1, 1)
+        button2 = QtGui.QPushButton("revive")
+        button2.setObjectName("revive")
+        layout.addWidget(button2, 2, 1)
+
+        layout.addWidget(QtGui.QLabel("Pool"), 3, 1)
+        layout.addWidget(QtGui.QLabel("Liste"), 4, 1)
+        button3 = QtGui.QPushButton("activate")
+        button3.setObjectName("activate")
+        layout.addWidget(button3, 5, 1)
+
+        self.setLayout(layout)
+
+    @QtCore.Slot()
+    def on_button_released(self):
+        self.participants.reshuffle()
+        action_list = ordered_list(self.participants)
+        self.layout().addWidget(action_list, 0, 0)
+        print "button released"
+
+
+class PoolWidget(QtGui.QWidget):
+    def __init__(self, participants, parent=None):
+        super(PoolWidget, self).__init__(parent)
+        self.participants = participants
+
+        self.setupUI()
+
+        QtCore.QMetaObject.connectSlotsByName(self)
+
+    def setupUI(self):
+        layout = QtGui.QGridLayout()
+
+        button = QtGui.QPushButton("press me")
+        button.setObjectName("button")
+        layout.addWidget(button, 1, 1)
+
+        self.setLayout(layout)
+
+    @QtCore.Slot()
+    def on_button_released(self):
+        print "button in PoolWidget released"
+
+
 class TestWindow(QtGui.QWidget):
     def __init__(self, participants, parent=None):
         super(TestWindow, self).__init__(parent)
@@ -128,22 +193,16 @@ class TestWindow(QtGui.QWidget):
     def setupUI(self):
         layout = QtGui.QGridLayout()
 
-        action_list = ordered_list(self.participants)
-        layout.addWidget(action_list, 0, 0)
+        tab_widget = QtGui.QTabWidget()
+        layout.addWidget(tab_widget, 0, 0)
 
-        button = QtGui.QPushButton("press me")
-        button.setObjectName("button")
-        layout.addWidget(button, 1, 1)
+        #pool_widget = PoolWidget(self.participants)
+        #tab_widget.addTab(pool_widget, "Pool")
+
+        battle_widget = BattleWidget(self.participants)
+        tab_widget.addTab(battle_widget, "Battle")
 
         self.setLayout(layout)
-
-    @QtCore.Slot()
-    def on_button_released(self):
-        self.participants.reshuffle()
-        action_list = ordered_list(self.participants)
-        self.layout().addWidget(action_list, 0, 0)
-        print "button released"
-
 
 if __name__ == "__main__":
     import sys
@@ -160,9 +219,18 @@ if __name__ == "__main__":
     char2 = PC("Bob", 3, 3, 8, 1)
     char3 = NPC("Eve", 3, 3, 8, 1)
     char4 = PC("Villain 1", 3, 3, 8, 1)
+    chars = [
+        PC("Tristan Presbyterian", 3, 3, 8, 1),
+        PC("Frederik Manson", 3, 3, 8, 1),
+        PC("Bruder Hieronymus", 3, 3, 8, 1),
+        PC("Nader al Malik", 3, 3, 8, 1),
+        NPC("Ronny", 3, 3, 8, 1),
+        NPC("Eve", 3, 3, 8, 1),
+    ]
     #char4.reduce_hitpoints(3)
 
-    participants = participants_list([char1, char2, char3, char4])
+    #participants = participants_list([char1, char2, char3, char4])
+    participants = participants_list(chars)
 
     ol = TestWindow(participants)
     ol.show()
