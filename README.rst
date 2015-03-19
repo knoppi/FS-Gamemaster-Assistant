@@ -12,4 +12,4 @@ Public Licence in version 2 or in any later version.
 
 More information can be found at http://fs.knofafo.de/ga
 
-The current version is 0.1 - with very little functionality yet great plans!
+The current version is 0.1.1 - with very little functionality yet great plans!
